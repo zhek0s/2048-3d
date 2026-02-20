@@ -18,9 +18,11 @@ public class GameInstaller : MonoInstaller
         Container.Bind<float>().WithId("MergeThreshold").FromInstance(mergeThreshold);
         Container.Bind<float>().WithId("MergeBounceForce").FromInstance(bounceForce);
 
-        Container.Bind<MergeService>().AsSingle().NonLazy();
+        Container.Bind<MergeService>().AsSingle();
+        Container.Bind<GameStateService>().AsSingle();
         Container.Bind<GameOverService>().AsSingle();
 
         Container.Bind<KillZone>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<GameController>().FromComponentInHierarchy().AsSingle();
     }
 }

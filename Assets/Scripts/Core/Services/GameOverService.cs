@@ -1,18 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class GameOverService
 {
-    public bool IsGameOver { get; private set; }
+    private readonly GameStateService gameStateService;
+    private int lastScore = 0;
 
-    public void TriggerGameOver()
+    public bool IsGameOver => gameStateService.CurrentState == GameState.GameOver;
+
+    [Inject]
+    public GameOverService(GameStateService gameStateService)
     {
+        this.gameStateService = gameStateService;
+    }
+
+    public void TriggerGameOver(int score = 0)
+    {
+        lastScore = score;
+
         if (IsGameOver) return;
 
-        IsGameOver = true;
+        gameStateService.SetState(GameState.GameOver);
+    }
 
-        Debug.Log("GAME OVER");
-        Time.timeScale = 0f;
+    public int GetLastScore()
+    {
+        return lastScore;
     }
 }
