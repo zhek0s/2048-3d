@@ -32,5 +32,6 @@ public class CubeMerger : MonoBehaviour
     {
         Destroy(a.gameObject);
         b.Init(a.Value * 2);
+        FindObjectOfType<ScoreManager>().AddScore(a.Value/2);
     }
 }
