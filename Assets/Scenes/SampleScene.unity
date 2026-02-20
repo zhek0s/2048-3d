@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &68364164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,7 +263,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &233311495
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1116,7 +1116,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &717907931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2615,7 +2615,7 @@ MonoBehaviour:
   cubeSpawner: {fileID: 2059103790}
   scoreManager: {fileID: 233311496}
   inputController: {fileID: 1349996558}
-  mergeThreshold: 100
+  mergeThreshold: 0.5
   bounceForce: 4
 --- !u!1 &2059103789
 GameObject:
@@ -2650,6 +2650,7 @@ MonoBehaviour:
   cubePrefab: {fileID: 2638672390167576149, guid: 5706f0b60415c6449b531ae628201037,
     type: 3}
   spawnPoint: {fileID: 298774151}
+  IsSpawnStopped: 1
 --- !u!114 &2059103791
 MonoBehaviour:
   m_ObjectHideFlags: 0
