@@ -39,7 +39,6 @@ public class MergeService : MonoBehaviour
 
         a.transform.position = position;
         a.Init(newValue);
-        //Cube newCube = spawner.SpawnAt(position, newValue);
 
         scoreManager.AddScore(newValue/4);
     }

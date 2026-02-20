@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Cube : MonoBehaviour
@@ -32,6 +33,26 @@ public class Cube : MonoBehaviour
 
     private void UpdateVisual()
     {
-        Debug.Log($"Cube spawned. Value: {Value}");
+        var cubeRenderer = GetComponent<Renderer>();
+        cubeRenderer.material.SetColor("_Color", GetColorFor(Value));
+
+        TextMeshPro[] texts = GetComponentsInChildren<TextMeshPro>();
+        foreach (TextMeshPro textMeshPro in texts)
+            textMeshPro.text = Value.ToString();
+    }
+
+    private Color GetColorFor(int number)
+    {
+        return number switch
+        {
+            2 => Color.red,
+            4 => Color.green,
+            8 => Color.blue,
+            16 => Color.white,
+            32 => Color.yellow,
+            64 => Color.cyan,
+            128 => Color.magenta,
+            _ => Color.gray,
+        };
     }
 }

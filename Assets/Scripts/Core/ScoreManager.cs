@@ -1,24 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ScoreManager : MonoBehaviour
 {
-    public int Score { get; private set; }
+    private int _score;
+    public int Score { 
+        get { return _score; }
+        private set
+        {
+            _score = value;
+            GetComponent<TextMeshPro>().text = $"Score: {_score}";
+        } 
+    }
 
     void Start()
     {
         Score = 0;
     }
 
-    void Update()
-    {
-        
-    }
-
     public void AddScore(int value)
     {
         Score += value;
-        Debug.Log("Score: " + Score);
     }
 }
