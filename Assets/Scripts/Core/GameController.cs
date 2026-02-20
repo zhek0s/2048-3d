@@ -15,6 +15,10 @@ public class GameController : MonoBehaviour
     void Update()
     {
 
+        if (Input.GetMouseButtonUp(1)) //just for testing, remove later
+        {
+            SpawnNewCube();
+        }
     }
 
     private void SpawnNewCube()
