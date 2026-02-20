@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,11 @@ public class InputController : MonoBehaviour
 {
     [SerializeField] private float launchForce = 10f;
     [SerializeField] private float xLimit = 2f;
-    private Cube currentCube;
+    private Cube? currentCube;
 
-    public void SetCube(Cube cube)
+    public event Action OnCubeLaunched;
+
+    public void SetCube(Cube? cube)
     {
         currentCube = cube;
     }
@@ -32,6 +35,7 @@ public class InputController : MonoBehaviour
         {
             currentCube.Launch(launchForce);
             currentCube = null;
+            OnCubeLaunched.Invoke();
         }
     }
 }

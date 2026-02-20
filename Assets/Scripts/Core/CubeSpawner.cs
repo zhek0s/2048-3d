@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 public class CubeSpawner : MonoBehaviour
 {
     [SerializeField] private Cube cubePrefab;
     [SerializeField] private Transform spawnPoint;
+    public bool IsSpawnStopped = true;
 
     public Cube Spawn()
     {
@@ -15,5 +17,12 @@ public class CubeSpawner : MonoBehaviour
         cube.Init(value);
 
         return cube;
+    }
+
+    public async UniTask<Cube?> SpawnAsync()
+    {
+        await UniTask.Delay(200);
+        if (IsSpawnStopped) return null;
+        return Spawn();
     }
 }
