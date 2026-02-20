@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
-public class MergeService : MonoBehaviour
+public class MergeService
 {
     private readonly float mergeThreshold;
     private readonly CubeSpawner spawner;
     private readonly ScoreManager scoreManager;
 
+    [Inject]
     public MergeService(
-        float threshold,
+        [Inject(Id = "MergeThreshold")] float threshold,
         CubeSpawner spawner,
         ScoreManager scoreManager)
     {

@@ -1,25 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private CubeSpawner spawner;
-    [SerializeField] private InputController inputController;
-    [SerializeField] private ScoreManager scoreManager;
-    [SerializeField] private float mergeThreshold = 2f;
+    [Inject] private CubeSpawner spawner;
+    [Inject] private InputController inputController;
+    [Inject] private ScoreManager scoreManager;
+    [Inject] private MergeService mergeService;
 
-    private MergeService mergeService;
     private Cube currentCube;
 
     void Start()
     {
-        mergeService = new MergeService(
-            mergeThreshold, 
-            spawner,
-            scoreManager
-            );
-
         SpawnNewCube();
     }
 
