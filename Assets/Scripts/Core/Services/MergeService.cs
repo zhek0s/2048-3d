@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 public class MergeService
 {
     private readonly float mergeThreshold;
+    private readonly float bounceForce;
     private readonly CubeSpawner spawner;
     private readonly ScoreManager scoreManager;
 
@@ -15,10 +16,12 @@ public class MergeService
     [Inject]
     public MergeService(
         [Inject(Id = "MergeThreshold")] float threshold,
+        [Inject(Id = "MergeBounceForce")] float bounceForce,
         CubeSpawner spawner,
         ScoreManager scoreManager)
     {
         mergeThreshold = threshold;
+        this.bounceForce = bounceForce;
         this.spawner = spawner;
         this.scoreManager = scoreManager;
     }
@@ -55,7 +58,7 @@ public class MergeService
 
         a.transform.position = position;
         a.Init(newValue);
-        a.Bounce(4f, movingForce/4f);
+        a.Bounce(bounceForce, movingForce/bounceForce);
 
         scoreManager.AddScore(newValue/4);
     }

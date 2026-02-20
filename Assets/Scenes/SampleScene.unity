@@ -1497,7 +1497,8 @@ MonoBehaviour:
   cubeSpawner: {fileID: 2059103790}
   scoreManager: {fileID: 233311496}
   inputController: {fileID: 1349996558}
-  mergeThreshold: 2
+  mergeThreshold: 1
+  bounceForce: 4
 --- !u!1 &2059103789
 GameObject:
   m_ObjectHideFlags: 0
