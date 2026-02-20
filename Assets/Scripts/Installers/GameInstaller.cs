@@ -19,5 +19,8 @@ public class GameInstaller : MonoInstaller
         Container.Bind<float>().WithId("MergeBounceForce").FromInstance(bounceForce);
 
         Container.Bind<MergeService>().AsSingle().NonLazy();
+        Container.Bind<GameOverService>().AsSingle();
+
+        Container.Bind<KillZone>().FromComponentInHierarchy().AsSingle();
     }
 }

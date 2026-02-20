@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 public class Cube : MonoBehaviour
 {
     public int Value { get; private set; }
+    public bool IsLaunched { get; private set; }
     private Rigidbody rb;
     public event Action<Cube, Collision> OnCollisionEntered;
 
@@ -21,8 +22,14 @@ public class Cube : MonoBehaviour
         OnCollisionEntered?.Invoke(this, collision);
     }
 
+    void OnTriggerExit(Collider other)
+    {
+        IsLaunched = true;
+    }
+
     public void Init(int value)
     {
+        IsLaunched = false;
         this.Value = value;
         UpdateVisual();
     }
