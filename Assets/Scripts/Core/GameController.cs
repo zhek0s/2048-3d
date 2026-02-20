@@ -34,8 +34,8 @@ public class GameController : MonoBehaviour
         currentCube.OnCollisionEntered += HandleCollision;
     }
 
-    private void HandleCollision(Cube cube, Collision collision)
+    private async void HandleCollision(Cube cube, Collision collision)
     {
-        mergeService.TryMerge(cube, collision);
+        await mergeService.TryMergeAsync(cube, collision);
     }
 }

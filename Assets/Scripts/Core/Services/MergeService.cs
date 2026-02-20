@@ -2,26 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using Cysharp.Threading.Tasks;
 
 public class MergeService
 {
     private readonly float mergeThreshold;
+    private readonly float bounceForce;
     private readonly CubeSpawner spawner;
     private readonly ScoreManager scoreManager;
+
+    private bool isMerging;
 
     [Inject]
     public MergeService(
         [Inject(Id = "MergeThreshold")] float threshold,
+        [Inject(Id = "MergeBounceForce")] float bounceForce,
         CubeSpawner spawner,
         ScoreManager scoreManager)
     {
         mergeThreshold = threshold;
+        this.bounceForce = bounceForce;
         this.spawner = spawner;
         this.scoreManager = scoreManager;
     }
 
-    public void TryMerge(Cube cube, Collision collision)
+    public async UniTask TryMergeAsync(Cube cube, Collision collision)
     {
+        if (isMerging) return;
         Cube other = collision.gameObject.GetComponent<Cube>();
 
         if (other == null) return;
@@ -29,18 +36,29 @@ public class MergeService
         if (other.Value != cube.Value) return;
         if (collision.impulse.magnitude < mergeThreshold) return;
 
-        Merge(cube, other);
+        isMerging = true;
+
+        await MergeAsync(cube, other);
+
+        isMerging = false;
     }
 
-    private void Merge(Cube a, Cube b)
+    private async UniTask MergeAsync(Cube a, Cube b)
     {
         Vector3 position = (a.transform.position + b.transform.position) / 2f;
         int newValue = a.Value * 2;
+        Vector3 movingForce = a.GetComponent<Rigidbody>().velocity;
+
+        a.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        b.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+        await UniTask.Delay(100);
 
         Object.Destroy(b.gameObject);
 
         a.transform.position = position;
         a.Init(newValue);
+        a.Bounce(bounceForce, movingForce/bounceForce);
 
         scoreManager.AddScore(newValue/4);
     }
