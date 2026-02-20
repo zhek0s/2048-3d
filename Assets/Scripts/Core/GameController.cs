@@ -7,7 +7,6 @@ public class GameController : MonoBehaviour
 {
     [Inject] private CubeSpawner spawner;
     [Inject] private InputController inputController;
-    [Inject] private ScoreManager scoreManager;
     [Inject] private MergeService mergeService;
     [Inject] private GameStateService gameStateService;
     [Inject] private GameOverService gameOverService;

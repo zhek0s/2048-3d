@@ -5,6 +5,7 @@ using Zenject;
 
 public class GameOverService
 {
+    [Inject] private ScoreManager scoreManager;
     private readonly GameStateService gameStateService;
     private int lastScore = 0;
 
@@ -16,9 +17,10 @@ public class GameOverService
         this.gameStateService = gameStateService;
     }
 
-    public void TriggerGameOver(int score = 0)
+    public void TriggerGameOver()
     {
-        lastScore = score;
+        lastScore = scoreManager.Score;
+        scoreManager.SetScore(0);
 
         if (IsGameOver) return;
 

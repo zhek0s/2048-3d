@@ -26,7 +26,7 @@ public class GameOverView : MonoBehaviour
         {
             restartButton.gameObject.SetActive(true);
             lastScoreText.gameObject.SetActive(true);
-            lastScoreText.gameObject.GetComponent<TMP_Text>().text = gameOverService.GetLastScore().ToString();
+            lastScoreText.gameObject.GetComponent<TMP_Text>().text = $"Your score: {gameOverService.GetLastScore()}";
         }
     }
 

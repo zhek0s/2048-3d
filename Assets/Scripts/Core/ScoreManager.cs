@@ -24,4 +24,9 @@ public class ScoreManager : MonoBehaviour
     {
         Score += value;
     }
+
+    public void SetScore(int value)
+    {
+        Score = value;
+    }
 }
