@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Cube : MonoBehaviour
 {
@@ -29,6 +30,15 @@ public class Cube : MonoBehaviour
     public void Launch(float force)
     {
         rb.AddForce(Vector3.forward * force, ForceMode.Impulse);
+    }
+
+    public void Bounce(float upwardForce, Vector3 movingForce)
+    {
+        Vector3 randomDirection = new Vector3(Random.Range(-0.2f, 0.2f), 1f, Random.Range(-0.2f, 0.2f)).normalized;
+
+        Vector3 force = randomDirection * upwardForce + movingForce;
+
+        rb.AddForce(force, ForceMode.Impulse);
     }
 
     private void UpdateVisual()
