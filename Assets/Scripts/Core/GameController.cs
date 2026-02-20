@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,15 +17,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         gameStateService.OnStateChanged += HandleStateChanged;
-    }
-
-    void Update()
-    {
-
-        if (Input.GetMouseButtonUp(1)) //just for testing, remove later
-        {
-            SpawnNewCube();
-        }
+        inputController.OnCubeLaunched += HandleOnCubeLaunched;
     }
 
     private void SpawnNewCube()
@@ -49,26 +42,34 @@ public class GameController : MonoBehaviour
                 break;
 
             case GameState.GameOver:
-                gameOverService.TriggerGameOver(scoreManager.Score);
+                gameOverService.TriggerGameOver();
                 StopGame();
                 break;
         }
     }
 
-    private void StartGame()
+    private async void HandleOnCubeLaunched()
     {
-        Time.timeScale = 1f;
+        currentCube = await spawner.SpawnAsync();
+        currentCube.OnCollisionEntered += HandleCollision;
+        inputController.SetCube(currentCube);
+    }
+
+    private async void StartGame()
+    {
+        spawner.IsSpawnStopped = false;
+        await UniTask.Delay(100);
         SpawnNewCube();
     }
 
     private void StopGame()
     {
-        Time.timeScale = 0f;
+        spawner.IsSpawnStopped = true;
+        inputController.SetCube(null);
     }
 
     public void RestartGame()
     {
-        Time.timeScale = 1f;
 
         foreach (var cube in FindObjectsOfType<Cube>())
         {
