@@ -13,11 +13,6 @@ public class InputController : MonoBehaviour
         currentCube = cube;
     }
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         if (currentCube == null) return;

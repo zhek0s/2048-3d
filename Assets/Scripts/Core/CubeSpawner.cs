@@ -6,6 +6,7 @@ public class CubeSpawner : MonoBehaviour
 {
     [SerializeField] private Cube cubePrefab;
     [SerializeField] private Transform spawnPoint;
+
     public Cube Spawn()
     {
         Cube cube = Instantiate(cubePrefab, spawnPoint.position, Quaternion.identity);
@@ -14,15 +15,5 @@ public class CubeSpawner : MonoBehaviour
         cube.Init(value);
 
         return cube;
-    }
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
     }
 }

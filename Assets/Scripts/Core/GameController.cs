@@ -6,9 +6,20 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private CubeSpawner spawner;
     [SerializeField] private InputController inputController;
+    [SerializeField] private ScoreManager scoreManager;
+    [SerializeField] private float mergeThreshold = 2f;
+
+    private MergeService mergeService;
     private Cube currentCube;
+
     void Start()
     {
+        mergeService = new MergeService(
+            mergeThreshold, 
+            spawner,
+            scoreManager
+            );
+
         SpawnNewCube();
     }
 
@@ -25,5 +36,12 @@ public class GameController : MonoBehaviour
     {
         currentCube = spawner.Spawn();
         inputController.SetCube(currentCube);
+
+        currentCube.OnCollisionEntered += HandleCollision;
+    }
+
+    private void HandleCollision(Cube cube, Collision collision)
+    {
+        mergeService.TryMerge(cube, collision);
     }
 }
