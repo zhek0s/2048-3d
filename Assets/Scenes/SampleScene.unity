@@ -1432,7 +1432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawner: {fileID: 2059103790}
   inputController: {fileID: 1349996558}
-  scoreManager: {fileID: 0}
+  scoreManager: {fileID: 233311496}
   mergeThreshold: 2
 --- !u!4 &2059103792
 Transform:
