@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Cube : MonoBehaviour
@@ -32,6 +33,8 @@ public class Cube : MonoBehaviour
 
     private void UpdateVisual()
     {
-        Debug.Log($"Cube spawned. Value: {Value}");
+        TextMeshPro[] texts = GetComponentsInChildren<TextMeshPro>();
+        foreach (TextMeshPro textMeshPro in texts)
+            textMeshPro.text = Value.ToString();
     }
 }
