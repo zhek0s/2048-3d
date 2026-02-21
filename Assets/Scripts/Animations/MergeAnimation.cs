@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MergeAnimation : MonoBehaviour
 {
-    public static async UniTask MoveCubeAsync(Cube cube, Vector3 needPos, float startSpeed)
+    public static async UniTask MoveCubeToPointAsync(Cube cube, Vector3 needPos, float startSpeed)
     {
         float speed = startSpeed;
         float maxSpeed = 10;
@@ -18,7 +18,7 @@ public class MergeAnimation : MonoBehaviour
         }
     }
 
-    public static async UniTask Move2CubesTowardsAsync(Cube cube, Cube otherCube, float startSpeed)
+    public static async UniTask MoveCubeToOtherCubeAsync(Cube cube, Cube otherCube, float startSpeed)
     {
         float speed = startSpeed;
         float maxSpeed = 10;
