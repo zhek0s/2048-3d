@@ -21,7 +21,7 @@ public class CubeSpawner : MonoBehaviour
 
     public async UniTask<Cube?> SpawnAsync()
     {
-        await UniTask.Delay(200);
+        await UniTask.Delay(400);
         if (IsSpawnStopped) return null;
         return Spawn();
     }

@@ -29,13 +29,13 @@ public class Cube : MonoBehaviour
 
     public void Init(int value)
     {
-        IsLaunched = false;
         this.Value = value;
         UpdateVisual();
     }
 
     public void Launch(float force)
     {
+        IsLaunched = false;
         rb.AddForce(Vector3.forward * force, ForceMode.Impulse);
     }
 
