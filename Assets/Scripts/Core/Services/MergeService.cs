@@ -51,16 +51,16 @@ public class MergeService
 
         float aSpeed = a.GetComponent<Rigidbody>().velocity.magnitude;
         float bSpeed = b.GetComponent<Rigidbody>().velocity.magnitude;
-        a.GetComponent<Rigidbody>().isKinematic = true;
-        b.GetComponent<Rigidbody>().isKinematic = true;
+        a.DisablePhysics();
+        b.DisablePhysics();
 
         if (aSpeed > bSpeed)
             await MergeAnimation.MoveCubeToOtherCubeAsync(a, b, aSpeed);
         else
             await MergeAnimation.MoveCubeToOtherCubeAsync(b, a, bSpeed);
 
-        a.GetComponent<Rigidbody>().isKinematic = false;
-        b.GetComponent<Rigidbody>().isKinematic = false;
+        a.EnablePhysics();
+        b.EnablePhysics();
         cubePool.Return(b);
 
         a.transform.position = position;

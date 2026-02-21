@@ -2628,6 +2628,7 @@ GameObject:
   - component: {fileID: 2059103792}
   - component: {fileID: 2059103791}
   - component: {fileID: 2059103790}
+  - component: {fileID: 2059103793}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2647,8 +2648,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255777e17c65c764094d9f2dd14ce4c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubePrefab: {fileID: 2638672390167576149, guid: 5706f0b60415c6449b531ae628201037,
-    type: 3}
   spawnPoint: {fileID: 298774151}
   IsSpawnStopped: 1
 --- !u!114 &2059103791
@@ -2678,3 +2677,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2059103793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059103789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 834f4775fb71d8c4280f1df6ec22ea19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cubePrefab: {fileID: 2638672390167576149, guid: 5706f0b60415c6449b531ae628201037,
+    type: 3}
+  initialSize: 20
