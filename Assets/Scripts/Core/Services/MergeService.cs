@@ -49,10 +49,13 @@ public class MergeService
         int newValue = a.Value * 2;
         Vector3 movingForce = a.GetComponent<Rigidbody>().velocity;
 
-        a.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        b.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        float aSpeed = a.GetComponent<Rigidbody>().velocity.magnitude;
+        float bSpeed = b.GetComponent<Rigidbody>().velocity.magnitude;
 
-        await UniTask.Delay(100);
+        if (aSpeed > bSpeed)
+            await MergeAnimation.Move2CubesTowardsAsync(a, b, aSpeed);
+        else
+            await MergeAnimation.Move2CubesTowardsAsync(b, a, bSpeed);
 
         cubePool.Return(b);
 
