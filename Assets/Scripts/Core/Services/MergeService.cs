@@ -8,7 +8,7 @@ public class MergeService
 {
     private readonly float mergeThreshold;
     private readonly float bounceForce;
-    private readonly CubeSpawner spawner;
+    private readonly CubePool cubePool;
     private readonly ScoreManager scoreManager;
 
     private bool isMerging;
@@ -17,12 +17,12 @@ public class MergeService
     public MergeService(
         [Inject(Id = "MergeThreshold")] float threshold,
         [Inject(Id = "MergeBounceForce")] float bounceForce,
-        CubeSpawner spawner,
+        CubePool cubePool,
         ScoreManager scoreManager)
     {
         mergeThreshold = threshold;
         this.bounceForce = bounceForce;
-        this.spawner = spawner;
+        this.cubePool = cubePool;
         this.scoreManager = scoreManager;
     }
 
@@ -54,10 +54,10 @@ public class MergeService
 
         await UniTask.Delay(100);
 
-        Object.Destroy(b.gameObject);
+        cubePool.Return(b);
 
         a.transform.position = position;
-        a.Init(newValue);
+        a.Init(newValue, position);
         a.Bounce(bounceForce, movingForce/bounceForce);
 
         scoreManager.AddScore(newValue/4);
