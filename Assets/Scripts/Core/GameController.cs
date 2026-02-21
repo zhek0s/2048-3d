@@ -51,8 +51,11 @@ public class GameController : MonoBehaviour
     private async void HandleOnCubeLaunched()
     {
         currentCube = await spawner.SpawnAsync();
-        currentCube.OnCollisionEntered += HandleCollision;
-        inputController.SetCube(currentCube);
+        if (currentCube != null)
+        {
+            currentCube.OnCollisionEntered += HandleCollision;
+            inputController.SetCube(currentCube);
+        }
     }
 
     private async void StartGame()
