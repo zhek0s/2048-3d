@@ -58,10 +58,19 @@ public class Cube : MonoBehaviour
         rb.AddForce(force, ForceMode.Impulse);
     }
 
+    public void EnablePhysics() => SetPhysics(false);
+    public void DisablePhysics() => SetPhysics(true);
+
     public void Deactivate()
     {
         OnCollisionEntered = null;
         gameObject.SetActive(false);
+    }
+
+    private void SetPhysics(bool state)
+    {
+        rb.isKinematic = state;
+        GetComponent<BoxCollider>().enabled = !state;
     }
 
     private void UpdateVisual()
