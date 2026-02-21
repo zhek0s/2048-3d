@@ -27,9 +27,19 @@ public class Cube : MonoBehaviour
         IsLaunched = true;
     }
 
-    public void Init(int value)
+    public void Init(int value, Vector3 position)
     {
         this.Value = value;
+        IsLaunched = false;
+
+        transform.position = position;
+        transform.rotation = Quaternion.identity;
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        gameObject.SetActive(true);
+
         UpdateVisual();
     }
 
@@ -46,6 +56,12 @@ public class Cube : MonoBehaviour
         Vector3 force = randomDirection * upwardForce + movingForce;
 
         rb.AddForce(force, ForceMode.Impulse);
+    }
+
+    public void Deactivate()
+    {
+        OnCollisionEntered = null;
+        gameObject.SetActive(false);
     }
 
     private void UpdateVisual()
