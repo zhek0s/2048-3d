@@ -9,14 +9,19 @@ public class AutoMergeBoosterService
 {
     private readonly CubePool cubePool;
     private readonly MergeService mergeService;
+    private readonly ParticlePool particlePool;
 
     private bool isRunning;
 
     [Inject]
-    public AutoMergeBoosterService(CubePool cubePool, MergeService mergeService)
+    public AutoMergeBoosterService(
+        CubePool cubePool, 
+        MergeService mergeService,
+        ParticlePool particlePool) 
     {
         this.cubePool = cubePool;
         this.mergeService = mergeService;
+        this.particlePool = particlePool;
     }
 
     public async UniTask RunAsync()
@@ -37,8 +42,11 @@ public class AutoMergeBoosterService
         Cube b = pair.ElementAt(1);
 
         await MergeAnimation.BoosterSequence(a, b);
-
-        await mergeService.ForceMergeAsync(a, b);
+        Vector3 center = (a.transform.position + b.transform.position) / 2f;
+        await UniTask.WhenAll(
+            particlePool.PlayAsync(center),
+            mergeService.ForceMergeAsync(a, b)
+        );
 
         isRunning = false;
     }

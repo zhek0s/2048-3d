@@ -26,5 +26,6 @@ public class GameInstaller : MonoInstaller
         Container.Bind<KillZone>().FromComponentInHierarchy().AsSingle();
         Container.Bind<GameController>().FromComponentInHierarchy().AsSingle();
         Container.Bind<CubePool>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<ParticlePool>().FromComponentInHierarchy().AsSingle();
     }
 }
