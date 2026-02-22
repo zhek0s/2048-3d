@@ -7,7 +7,6 @@ using Zenject;
 public class BoosterButtonView : MonoBehaviour
 {
     [SerializeField] private Button button;
-    [SerializeField] private GameObject mergeButton;
 
     [Inject] private AutoMergeBoosterService boosterService;
     [Inject] private GameStateService gameStateService;
@@ -36,8 +35,8 @@ public class BoosterButtonView : MonoBehaviour
     private void HandleStateChanged(GameState state)
     {
         if (state == GameState.Playing)
-            mergeButton.gameObject.SetActive(true);
+            button.gameObject.SetActive(true);
         else
-            mergeButton.gameObject.SetActive(false);
+            button.gameObject.SetActive(false);
     }
 }

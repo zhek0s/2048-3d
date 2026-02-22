@@ -36,25 +36,10 @@ public class AutoMergeBoosterService
         Cube a = pair.ElementAt(0);
         Cube b = pair.ElementAt(1);
 
-        await ExecuteBoosterSequence(a, b);
-
-        isRunning = false;
-    }
-
-    private async UniTask ExecuteBoosterSequence(Cube a, Cube b)
-    {
-        a.DisablePhysics();
-        b.DisablePhysics();
-
-        Vector3 upOffset = Vector3.up * 5f;
-
-        await UniTask.WhenAll(
-            MergeAnimation.MoveCubeToPointAsync(a, a.transform.position + upOffset, 0.4f),
-            MergeAnimation.MoveCubeToPointAsync(b, b.transform.position + upOffset, 0.4f)
-        );
-
-        await UniTask.Delay(150);
+        await MergeAnimation.ExecuteBoosterSequence(a, b);
 
         await mergeService.ForceMergeAsync(a, b);
+
+        isRunning = false;
     }
 }
