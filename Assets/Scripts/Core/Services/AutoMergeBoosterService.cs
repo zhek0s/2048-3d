@@ -36,7 +36,7 @@ public class AutoMergeBoosterService
         Cube a = pair.ElementAt(0);
         Cube b = pair.ElementAt(1);
 
-        await MergeAnimation.ExecuteBoosterSequence(a, b);
+        await MergeAnimation.BoosterSequence(a, b);
 
         await mergeService.ForceMergeAsync(a, b);
 

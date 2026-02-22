@@ -48,6 +48,7 @@ public class MergeAnimation : MonoBehaviour
             MoveCubeToPointAsync(b, b.transform.position + downOffset, 0f)
         );
         await UniTask.Delay(300);
+        await MoveCubeToOtherCubeAsync(a, b, 0f);
     }
 
     private static float MoveCube(
