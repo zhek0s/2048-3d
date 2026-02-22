@@ -43,6 +43,12 @@ public class MergeService
         isMerging = false;
     }
 
+    public async UniTask ForceMergeAsync(Cube a, Cube b)
+    {
+        if (a == null || b == null) return;
+        await MergeAsync(a, b);
+    }
+
     private async UniTask MergeAsync(Cube a, Cube b)
     {
         Vector3 position = (a.transform.position + b.transform.position) / 2f;
