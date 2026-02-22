@@ -55,15 +55,21 @@ public class MergeService
         int newValue = a.Value * 2;
         Vector3 movingForce = a.GetComponent<Rigidbody>().velocity;
 
-        float aSpeed = a.GetComponent<Rigidbody>().velocity.magnitude;
-        float bSpeed = b.GetComponent<Rigidbody>().velocity.magnitude;
+        float aSpeed = a.GetRigidBodySpeed();
+        float bSpeed = b.GetRigidBodySpeed();
         a.DisablePhysics();
         b.DisablePhysics();
 
-        if (aSpeed > bSpeed)
+        if (Mathf.Approximately(aSpeed, bSpeed))
+        {
             await MergeAnimation.MoveCubeToOtherCubeAsync(a, b, aSpeed);
-        else
             await MergeAnimation.MoveCubeToOtherCubeAsync(b, a, bSpeed);
+        }
+        else
+            if (aSpeed > bSpeed)
+                await MergeAnimation.MoveCubeToOtherCubeAsync(a, b, aSpeed);
+            else
+                await MergeAnimation.MoveCubeToOtherCubeAsync(b, a, bSpeed);
 
         a.EnablePhysics();
         b.EnablePhysics();

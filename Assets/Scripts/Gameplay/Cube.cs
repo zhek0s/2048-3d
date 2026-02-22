@@ -58,6 +58,14 @@ public class Cube : MonoBehaviour
         rb.AddForce(force, ForceMode.Impulse);
     }
 
+    public float GetRigidBodySpeed()
+    {
+        if (rb.isKinematic)
+            return 0;
+        else
+            return rb.velocity.magnitude;
+    }
+
     public void EnablePhysics() => SetPhysics(false);
     public void DisablePhysics() => SetPhysics(true);
 
