@@ -31,6 +31,26 @@ public class MergeAnimation : MonoBehaviour
         }
     }
 
+    public static async UniTask BoosterSequence(Cube a, Cube b)
+    {
+        a.DisablePhysics();
+        b.DisablePhysics();
+
+        Vector3 upOffset = Vector3.up * 3f;
+        await UniTask.WhenAll(
+            MoveCubeToPointAsync(a, a.transform.position + upOffset, 0.4f),
+            MoveCubeToPointAsync(b, b.transform.position + upOffset, 0.4f)
+        );
+        await UniTask.Delay(100);
+        Vector3 downOffset = Vector3.down * 1f;
+        await UniTask.WhenAll(
+            MoveCubeToPointAsync(a, a.transform.position + downOffset, 0f),
+            MoveCubeToPointAsync(b, b.transform.position + downOffset, 0f)
+        );
+        await UniTask.Delay(300);
+        await MoveCubeToOtherCubeAsync(a, b, 0f);
+    }
+
     private static float MoveCube(
         Cube cube,
         Vector3 needPos,

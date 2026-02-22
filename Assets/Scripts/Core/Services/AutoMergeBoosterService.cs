@@ -1,0 +1,45 @@
+using Cysharp.Threading.Tasks;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using Zenject;
+
+public class AutoMergeBoosterService
+{
+    private readonly CubePool cubePool;
+    private readonly MergeService mergeService;
+
+    private bool isRunning;
+
+    [Inject]
+    public AutoMergeBoosterService(CubePool cubePool, MergeService mergeService)
+    {
+        this.cubePool = cubePool;
+        this.mergeService = mergeService;
+    }
+
+    public async UniTask RunAsync()
+    {
+        if (isRunning) return;
+        isRunning = true;
+
+        var cubes = Object.FindObjectsOfType<Cube>().Where(c => c.IsLaunched).ToList();
+        var pair = cubes.GroupBy(c => c.Value).FirstOrDefault(g => g.Count() >= 2);
+
+        if (pair == null)
+        {
+            isRunning = false;
+            return;
+        }
+
+        Cube a = pair.ElementAt(0);
+        Cube b = pair.ElementAt(1);
+
+        await MergeAnimation.BoosterSequence(a, b);
+
+        await mergeService.ForceMergeAsync(a, b);
+
+        isRunning = false;
+    }
+}

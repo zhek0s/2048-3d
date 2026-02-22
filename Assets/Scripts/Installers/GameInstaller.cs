@@ -21,6 +21,7 @@ public class GameInstaller : MonoInstaller
         Container.Bind<MergeService>().AsSingle();
         Container.Bind<GameStateService>().AsSingle();
         Container.Bind<GameOverService>().AsSingle();
+        Container.Bind<AutoMergeBoosterService>().AsSingle();
 
         Container.Bind<KillZone>().FromComponentInHierarchy().AsSingle();
         Container.Bind<GameController>().FromComponentInHierarchy().AsSingle();

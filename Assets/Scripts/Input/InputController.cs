@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static UnityEngine.GraphicsBuffer;
 
 public class InputController : MonoBehaviour
@@ -11,6 +12,7 @@ public class InputController : MonoBehaviour
     private Cube? currentCube;
     private Rigidbody? currentRb;
     private float targetX;
+    private bool isDragging;
 
     public event Action OnCubeLaunched;
 
@@ -28,18 +30,26 @@ public class InputController : MonoBehaviour
     {
         if (currentCube == null) return;
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (IsPointerOverUI()) return;
+
+            isDragging = true;
+        }
+
+        if (Input.GetMouseButton(0) && isDragging)
         {
             float mouseX = Input.mousePosition.x;
             float t = Mathf.InverseLerp(0,Screen.width, mouseX);
             targetX = Mathf.Lerp(-xLimit, xLimit, t);
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && isDragging)
         {
             currentCube.Launch(launchForce);
             currentCube = null;
             currentRb = null;
+            isDragging = false;
             OnCubeLaunched.Invoke();
         }
     }
@@ -52,5 +62,18 @@ public class InputController : MonoBehaviour
         pos.x = Mathf.Clamp(targetX, -xLimit, xLimit);
 
         currentRb.MovePosition(pos);
+    }
+
+    private bool IsPointerOverUI()
+    {
+#if UNITY_EDITOR
+        return EventSystem.current.IsPointerOverGameObject();
+#else
+    if (Input.touchCount > 0)
+    {
+        return EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId);
+    }
+    return false;
+#endif
     }
 }
