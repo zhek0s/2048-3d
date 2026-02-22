@@ -70,7 +70,7 @@ public class MergeService
         cubePool.Return(b);
 
         a.transform.position = position;
-        a.Init(newValue, position);
+        a.Init(newValue, position, launched: true);
         a.Bounce(bounceForce, movingForce/bounceForce);
 
         scoreManager.AddScore(newValue/4);

@@ -27,10 +27,10 @@ public class Cube : MonoBehaviour
         IsLaunched = true;
     }
 
-    public void Init(int value, Vector3 position)
+    public void Init(int value, Vector3 position, bool launched = false)
     {
         this.Value = value;
-        IsLaunched = false;
+        IsLaunched = launched;
 
         transform.position = position;
         transform.rotation = Quaternion.identity;
