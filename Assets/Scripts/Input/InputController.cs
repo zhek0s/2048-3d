@@ -60,10 +60,13 @@ namespace Assets.Scripts.InputSystem
         {
             if (currentRb == null) return;
 
-            Vector3 pos = currentRb.position;
-            pos.x = Mathf.Clamp(targetX, -xLimit, xLimit);
+            if (isDragging)
+            {
+                Vector3 pos = currentRb.position;
+                pos.x = Mathf.Clamp(targetX, -xLimit, xLimit);
 
-            currentRb.MovePosition(pos);
+                currentRb.MovePosition(pos);
+            }
         }
 
         private bool IsPointerOverUI()
