@@ -3,76 +3,87 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using Cysharp.Threading.Tasks;
+using Assets.Scripts.Animations;
+using Assets.Scripts.Gameplay;
 
-public class MergeService
+namespace Assets.Scripts.Core.Services
 {
-    private readonly float mergeThreshold;
-    private readonly float bounceForce;
-    private readonly CubePool cubePool;
-    private readonly ScoreManager scoreManager;
-
-    private bool isMerging;
-
-    [Inject]
-    public MergeService(
-        [Inject(Id = "MergeThreshold")] float threshold,
-        [Inject(Id = "MergeBounceForce")] float bounceForce,
-        CubePool cubePool,
-        ScoreManager scoreManager)
+    public class MergeService
     {
-        mergeThreshold = threshold;
-        this.bounceForce = bounceForce;
-        this.cubePool = cubePool;
-        this.scoreManager = scoreManager;
-    }
+        private readonly float mergeThreshold;
+        private readonly float bounceForce;
+        private readonly CubePool cubePool;
+        private readonly ScoreManager scoreManager;
 
-    public async UniTask TryMergeAsync(Cube cube, Collision collision)
-    {
-        if (isMerging) return;
-        Cube other = collision.gameObject.GetComponent<Cube>();
+        private bool isMerging;
 
-        if (other == null) return;
-        if (other == cube) return;
-        if (other.Value != cube.Value) return;
-        if (collision.impulse.magnitude < mergeThreshold) return;
+        [Inject]
+        public MergeService(
+            [Inject(Id = "MergeThreshold")] float threshold,
+            [Inject(Id = "MergeBounceForce")] float bounceForce,
+            CubePool cubePool,
+            ScoreManager scoreManager)
+        {
+            mergeThreshold = threshold;
+            this.bounceForce = bounceForce;
+            this.cubePool = cubePool;
+            this.scoreManager = scoreManager;
+        }
 
-        isMerging = true;
+        public async UniTask TryMergeAsync(Cube cube, Collision collision)
+        {
+            if (isMerging) return;
+            Cube other = collision.gameObject.GetComponent<Cube>();
 
-        await MergeAsync(cube, other);
+            if (other == null) return;
+            if (other == cube) return;
+            if (other.Value != cube.Value) return;
+            if (collision.impulse.magnitude < mergeThreshold) return;
 
-        isMerging = false;
-    }
+            isMerging = true;
 
-    public async UniTask ForceMergeAsync(Cube a, Cube b)
-    {
-        if (a == null || b == null) return;
-        await MergeAsync(a, b);
-    }
+            await MergeAsync(cube, other);
 
-    private async UniTask MergeAsync(Cube a, Cube b)
-    {
-        Vector3 position = (a.transform.position + b.transform.position) / 2f;
-        int newValue = a.Value * 2;
-        Vector3 movingForce = a.GetComponent<Rigidbody>().velocity;
+            isMerging = false;
+        }
 
-        float aSpeed = a.GetComponent<Rigidbody>().velocity.magnitude;
-        float bSpeed = b.GetComponent<Rigidbody>().velocity.magnitude;
-        a.DisablePhysics();
-        b.DisablePhysics();
+        public async UniTask ForceMergeAsync(Cube a, Cube b)
+        {
+            if (a == null || b == null) return;
+            await MergeAsync(a, b);
+        }
 
-        if (aSpeed > bSpeed)
-            await MergeAnimation.MoveCubeToOtherCubeAsync(a, b, aSpeed);
-        else
-            await MergeAnimation.MoveCubeToOtherCubeAsync(b, a, bSpeed);
+        private async UniTask MergeAsync(Cube a, Cube b)
+        {
+            Vector3 position = (a.transform.position + b.transform.position) / 2f;
+            int newValue = a.Value * 2;
+            Vector3 movingForce = a.GetComponent<Rigidbody>().velocity;
 
-        a.EnablePhysics();
-        b.EnablePhysics();
-        cubePool.Return(b);
+            float aSpeed = a.GetRigidBodySpeed();
+            float bSpeed = b.GetRigidBodySpeed();
+            a.DisablePhysics();
+            b.DisablePhysics();
 
-        a.transform.position = position;
-        a.Init(newValue, position, launched: true);
-        a.Bounce(bounceForce, movingForce/bounceForce);
+            if (Mathf.Approximately(aSpeed, bSpeed))
+            {
+                await MergeAnimation.MoveCubeToOtherCubeAsync(a, b, 10f);
+                await MergeAnimation.MoveCubeToOtherCubeAsync(b, a, 10f);
+            }
+            else
+                if (aSpeed > bSpeed)
+                await MergeAnimation.MoveCubeToOtherCubeAsync(a, b, aSpeed);
+            else
+                await MergeAnimation.MoveCubeToOtherCubeAsync(b, a, bSpeed);
 
-        scoreManager.AddScore(newValue/4);
+            a.EnablePhysics();
+            b.EnablePhysics();
+            cubePool.Return(b);
+
+            a.transform.position = position;
+            a.Init(newValue, position, launched: true);
+            a.Bounce(bounceForce, movingForce / bounceForce);
+
+            scoreManager.AddScore(newValue / 4);
+        }
     }
 }

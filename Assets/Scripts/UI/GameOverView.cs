@@ -5,35 +5,40 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using TMPro;
+using Assets.Scripts.Core.Services;
+using Assets.Scripts.Core;
 
-public class GameOverView : MonoBehaviour
+namespace Assets.Scripts.UI
 {
-    [SerializeField] private Button restartButton;
-    [SerializeField] private GameObject lastScoreText;
-
-    [Inject] private GameStateService gameStateService;
-    [Inject] private GameOverService gameOverService;
-    [Inject] private GameController gameController;
-    void Start()
+    public class GameOverView : MonoBehaviour
     {
-        gameStateService.OnStateChanged += HandleStateChanged;
-        restartButton.onClick.AddListener(Restart);
-    }
+        [SerializeField] private Button restartButton;
+        [SerializeField] private GameObject lastScoreText;
 
-    private void HandleStateChanged(GameState state)
-    {
-        if (state == GameState.GameOver)
+        [Inject] private GameStateService gameStateService;
+        [Inject] private GameOverService gameOverService;
+        [Inject] private GameController gameController;
+        void Start()
         {
-            restartButton.gameObject.SetActive(true);
-            lastScoreText.gameObject.SetActive(true);
-            lastScoreText.gameObject.GetComponent<TMP_Text>().text = $"Your score: {gameOverService.GetLastScore()}";
+            gameStateService.OnStateChanged += HandleStateChanged;
+            restartButton.onClick.AddListener(Restart);
         }
-    }
 
-    private void Restart()
-    {
-        restartButton.gameObject.SetActive(false);
-        lastScoreText.gameObject.SetActive(false);
-        gameController.RestartGame();
+        private void HandleStateChanged(GameState state)
+        {
+            if (state == GameState.GameOver)
+            {
+                restartButton.gameObject.SetActive(true);
+                lastScoreText.gameObject.SetActive(true);
+                lastScoreText.gameObject.GetComponent<TMP_Text>().text = $"Your score: {gameOverService.GetLastScore()}";
+            }
+        }
+
+        private void Restart()
+        {
+            restartButton.gameObject.SetActive(false);
+            lastScoreText.gameObject.SetActive(false);
+            gameController.RestartGame();
+        }
     }
 }

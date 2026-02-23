@@ -3,53 +3,56 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 
-public class ParticlePool : MonoBehaviour
+namespace Assets.Scripts.Core
 {
-    [SerializeField] private ParticleSystem prefab;
-    [SerializeField] private int initialSize = 5;
-
-    private Queue<ParticleSystem> pool = new Queue<ParticleSystem>();
-
-    private void Awake()
+    public class ParticlePool : MonoBehaviour
     {
-        for (int i = 0; i < initialSize; i++)
+        [SerializeField] private ParticleSystem prefab;
+        [SerializeField] private int initialSize = 5;
+
+        private Queue<ParticleSystem> pool = new Queue<ParticleSystem>();
+
+        private void Awake()
         {
-            CreateNew();
+            for (int i = 0; i < initialSize; i++)
+            {
+                CreateNew();
+            }
         }
-    }
 
-    private ParticleSystem CreateNew()
-    {
-        var ps = Instantiate(prefab, transform);
-        ps.gameObject.SetActive(false);
-        pool.Enqueue(ps);
-        return ps;
-    }
+        private ParticleSystem CreateNew()
+        {
+            var ps = Instantiate(prefab, transform);
+            ps.gameObject.SetActive(false);
+            pool.Enqueue(ps);
+            return ps;
+        }
 
-    public ParticleSystem Get()
-    {
-        if (pool.Count == 0)
-            CreateNew();
+        public ParticleSystem Get()
+        {
+            if (pool.Count == 0)
+                CreateNew();
 
-        var ps = pool.Dequeue();
-        ps.gameObject.SetActive(true);
-        return ps;
-    }
+            var ps = pool.Dequeue();
+            ps.gameObject.SetActive(true);
+            return ps;
+        }
 
-    public void Return(ParticleSystem ps)
-    {
-        ps.gameObject.SetActive(false);
-        pool.Enqueue(ps);
-    }
+        public void Return(ParticleSystem ps)
+        {
+            ps.gameObject.SetActive(false);
+            pool.Enqueue(ps);
+        }
 
-    public async UniTask PlayAsync(Vector3 position)
-    {
-        var ps = Get();
-        ps.transform.position = position;
-        ps.Play();
+        public async UniTask PlayAsync(Vector3 position)
+        {
+            var ps = Get();
+            ps.transform.position = position;
+            ps.Play();
 
-        await UniTask.WaitUntil(() => !ps.isPlaying);
+            await UniTask.WaitUntil(() => !ps.isPlaying);
 
-        Return(ps);
+            Return(ps);
+        }
     }
 }

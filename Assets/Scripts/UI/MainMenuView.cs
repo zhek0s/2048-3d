@@ -1,23 +1,27 @@
+using Assets.Scripts.Core.Services;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class MainMenuView : MonoBehaviour
+namespace Assets.Scripts.UI
 {
-    [SerializeField] private Button startButton;
-
-    [Inject] private GameStateService gameStateService;
-
-    private void Start()
+    public class MainMenuView : MonoBehaviour
     {
-        startButton.onClick.AddListener(StartGame);
-    }
+        [SerializeField] private Button startButton;
 
-    private void StartGame()
-    {
-        gameStateService.SetState(GameState.Playing);
-        startButton.gameObject.SetActive(false);
+        [Inject] private GameStateService gameStateService;
+
+        private void Start()
+        {
+            startButton.onClick.AddListener(StartGame);
+        }
+
+        private void StartGame()
+        {
+            gameStateService.SetState(GameState.Playing);
+            startButton.gameObject.SetActive(false);
+        }
     }
 }
