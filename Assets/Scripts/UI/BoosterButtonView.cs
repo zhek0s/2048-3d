@@ -1,42 +1,46 @@
+using Assets.Scripts.Core.Services;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class BoosterButtonView : MonoBehaviour
+namespace Assets.Scripts.UI
 {
-    [SerializeField] private Button button;
-
-    [Inject] private AutoMergeBoosterService boosterService;
-    [Inject] private GameStateService gameStateService;
-
-    private bool isRunning;
-
-    private void Start()
+    public class BoosterButtonView : MonoBehaviour
     {
-        button.onClick.AddListener(OnClick);
-        gameStateService.OnStateChanged += HandleStateChanged;
-    }
+        [SerializeField] private Button button;
 
-    private async void OnClick()
-    {
-        if (isRunning) return;
+        [Inject] private AutoMergeBoosterService boosterService;
+        [Inject] private GameStateService gameStateService;
 
-        isRunning = true;
-        button.interactable = false;
+        private bool isRunning;
 
-        await boosterService.RunAsync();
+        private void Start()
+        {
+            button.onClick.AddListener(OnClick);
+            gameStateService.OnStateChanged += HandleStateChanged;
+        }
 
-        button.interactable = true;
-        isRunning = false;
-    }
+        private async void OnClick()
+        {
+            if (isRunning) return;
 
-    private void HandleStateChanged(GameState state)
-    {
-        if (state == GameState.Playing)
-            button.gameObject.SetActive(true);
-        else
-            button.gameObject.SetActive(false);
+            isRunning = true;
+            button.interactable = false;
+
+            await boosterService.RunAsync();
+
+            button.interactable = true;
+            isRunning = false;
+        }
+
+        private void HandleStateChanged(GameState state)
+        {
+            if (state == GameState.Playing)
+                button.gameObject.SetActive(true);
+            else
+                button.gameObject.SetActive(false);
+        }
     }
 }

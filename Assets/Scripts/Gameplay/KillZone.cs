@@ -1,21 +1,25 @@
+using Assets.Scripts.Core.Services;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class KillZone : MonoBehaviour
+namespace Assets.Scripts.Gameplay
 {
-    [Inject] private GameOverService gameOverService;
-
-    private void OnTriggerEnter(Collider other)
+    public class KillZone : MonoBehaviour
     {
-        if (gameOverService.IsGameOver) return;
+        [Inject] private GameOverService gameOverService;
 
-        Cube cube = other.GetComponent<Cube>();
-        if (cube == null) return;
+        private void OnTriggerEnter(Collider other)
+        {
+            if (gameOverService.IsGameOver) return;
 
-        if (!cube.IsLaunched) return;
+            Cube cube = other.GetComponent<Cube>();
+            if (cube == null) return;
 
-        gameOverService.TriggerGameOver();
+            if (!cube.IsLaunched) return;
+
+            gameOverService.TriggerGameOver();
+        }
     }
 }

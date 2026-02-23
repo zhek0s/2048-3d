@@ -4,21 +4,25 @@ using UnityEngine;
 using TMPro;
 using Zenject;
 using Unity.VisualScripting;
+using Assets.Scripts.Core.Services;
 
-public class HUDView : MonoBehaviour
+namespace Assets.Scripts.UI
 {
-    [SerializeField] private GameObject scoreText;
-    [Inject] private GameStateService gameStateService;
-    void Start()
+    public class HUDView : MonoBehaviour
     {
-        gameStateService.OnStateChanged += HandleStateChanged;
-    }
+        [SerializeField] private GameObject scoreText;
+        [Inject] private GameStateService gameStateService;
+        void Start()
+        {
+            gameStateService.OnStateChanged += HandleStateChanged;
+        }
 
-    private void HandleStateChanged(GameState state)
-    {
-        if (state == GameState.Playing)
-            scoreText.gameObject.SetActive(true);
-        else
-            scoreText.gameObject.SetActive(false);
+        private void HandleStateChanged(GameState state)
+        {
+            if (state == GameState.Playing)
+                scoreText.gameObject.SetActive(true);
+            else
+                scoreText.gameObject.SetActive(false);
+        }
     }
 }

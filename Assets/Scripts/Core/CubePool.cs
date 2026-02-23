@@ -1,44 +1,48 @@
+using Assets.Scripts.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubePool : MonoBehaviour
+namespace Assets.Scripts.Core
 {
-    [SerializeField] private Cube cubePrefab;
-    [SerializeField] private int initialSize = 20;
-
-    private Queue<Cube> pool = new Queue<Cube>();
-
-    private void Awake()
+    public class CubePool : MonoBehaviour
     {
-        for (int i = 0; i < initialSize; i++)
+        [SerializeField] private Cube cubePrefab;
+        [SerializeField] private int initialSize = 20;
+
+        private Queue<Cube> pool = new Queue<Cube>();
+
+        private void Awake()
         {
-            CreateNewCube();
-        }
-    }
-
-    private Cube CreateNewCube()
-    {
-        Cube cube = Instantiate(cubePrefab, transform);
-        cube.gameObject.SetActive(false);
-        pool.Enqueue(cube);
-        return cube;
-    }
-
-    public Cube Get()
-    {
-        if (pool.Count == 0)
-        {
-            CreateNewCube();
+            for (int i = 0; i < initialSize; i++)
+            {
+                CreateNewCube();
+            }
         }
 
-        Cube cube = pool.Dequeue();
-        return cube;
-    }
+        private Cube CreateNewCube()
+        {
+            Cube cube = Instantiate(cubePrefab, transform);
+            cube.gameObject.SetActive(false);
+            pool.Enqueue(cube);
+            return cube;
+        }
 
-    public void Return(Cube cube)
-    {
-        cube.Deactivate();
-        pool.Enqueue(cube);
+        public Cube Get()
+        {
+            if (pool.Count == 0)
+            {
+                CreateNewCube();
+            }
+
+            Cube cube = pool.Dequeue();
+            return cube;
+        }
+
+        public void Return(Cube cube)
+        {
+            cube.Deactivate();
+            pool.Enqueue(cube);
+        }
     }
 }

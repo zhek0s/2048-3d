@@ -1,3 +1,5 @@
+using Assets.Scripts.Animations;
+using Assets.Scripts.Gameplay;
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,49 +7,52 @@ using System.Linq;
 using UnityEngine;
 using Zenject;
 
-public class AutoMergeBoosterService
+namespace Assets.Scripts.Core.Services
 {
-    private readonly CubePool cubePool;
-    private readonly MergeService mergeService;
-    private readonly ParticlePool particlePool;
-
-    private bool isRunning;
-
-    [Inject]
-    public AutoMergeBoosterService(
-        CubePool cubePool, 
-        MergeService mergeService,
-        ParticlePool particlePool) 
+    public class AutoMergeBoosterService
     {
-        this.cubePool = cubePool;
-        this.mergeService = mergeService;
-        this.particlePool = particlePool;
-    }
+        private readonly CubePool cubePool;
+        private readonly MergeService mergeService;
+        private readonly ParticlePool particlePool;
 
-    public async UniTask RunAsync()
-    {
-        if (isRunning) return;
-        isRunning = true;
+        private bool isRunning;
 
-        var cubes = Object.FindObjectsOfType<Cube>().Where(c => c.IsLaunched).ToList();
-        var pair = cubes.GroupBy(c => c.Value).FirstOrDefault(g => g.Count() >= 2);
-
-        if (pair == null)
+        [Inject]
+        public AutoMergeBoosterService(
+            CubePool cubePool,
+            MergeService mergeService,
+            ParticlePool particlePool)
         {
-            isRunning = false;
-            return;
+            this.cubePool = cubePool;
+            this.mergeService = mergeService;
+            this.particlePool = particlePool;
         }
 
-        Cube a = pair.ElementAt(0);
-        Cube b = pair.ElementAt(1);
+        public async UniTask RunAsync()
+        {
+            if (isRunning) return;
+            isRunning = true;
 
-        await MergeAnimation.BoosterSequence(a, b);
-        Vector3 center = (a.transform.position + b.transform.position) / 2f;
-        await UniTask.WhenAll(
-            particlePool.PlayAsync(center),
-            mergeService.ForceMergeAsync(a, b)
-        );
+            var cubes = Object.FindObjectsOfType<Cube>().Where(c => c.IsLaunched).ToList();
+            var pair = cubes.GroupBy(c => c.Value).FirstOrDefault(g => g.Count() >= 2);
 
-        isRunning = false;
+            if (pair == null)
+            {
+                isRunning = false;
+                return;
+            }
+
+            Cube a = pair.ElementAt(0);
+            Cube b = pair.ElementAt(1);
+
+            await MergeAnimation.BoosterSequence(a, b);
+            Vector3 center = (a.transform.position + b.transform.position) / 2f;
+            await UniTask.WhenAll(
+                particlePool.PlayAsync(center),
+                mergeService.ForceMergeAsync(a, b)
+            );
+
+            isRunning = false;
+        }
     }
 }

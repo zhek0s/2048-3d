@@ -3,30 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ScoreManager : MonoBehaviour
+namespace Assets.Scripts.Core
 {
-    private int _score;
-    public int Score { 
-        get { return _score; }
-        private set
+    public class ScoreManager : MonoBehaviour
+    {
+        private int _score;
+        public int Score
         {
-            _score = value;
-            GetComponent<TextMeshPro>().text = $"Score: {_score}";
-        } 
-    }
+            get { return _score; }
+            private set
+            {
+                _score = value;
+                GetComponent<TextMeshPro>().text = $"Score: {_score}";
+            }
+        }
 
-    void Start()
-    {
-        Score = 0;
-    }
+        void Start()
+        {
+            Score = 0;
+        }
 
-    public void AddScore(int value)
-    {
-        Score += value;
-    }
+        public void AddScore(int value)
+        {
+            Score += value;
+        }
 
-    public void SetScore(int value)
-    {
-        Score = value;
+        public void SetScore(int value)
+        {
+            Score = value;
+        }
     }
 }
